@@ -57,7 +57,7 @@ class ViewController: UIViewController {
                     UIApplication.sharedApplication().endIgnoringInteractionEvents()
 
                     if success {
-                        // Signup successful
+                        self.performSegueWithIdentifier("Login", sender: self)
                     }
                     else {
                         if let errorString = error!.userInfo?["error"] as? String {
@@ -76,7 +76,7 @@ class ViewController: UIViewController {
                     UIApplication.sharedApplication().endIgnoringInteractionEvents()
 
                     if user != nil {
-                        // Logged in OK
+                        self.performSegueWithIdentifier("Login", sender: self)
                     }
                     else {
                         if let errorString = error!.userInfo?["error"] as? String {
@@ -129,6 +129,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+
+    ///////////////
+    // Go straight to the user list if a user is logged in. This can't be done in viewDidLoad()
+    // because the Segues have not been set up by that point.
+    
+    override func viewDidAppear(animated: Bool) {
+        if PFUser.currentUser() != nil {
+            self.performSegueWithIdentifier("Login", sender: self)
+        }
     }
 
     override func didReceiveMemoryWarning() {
