@@ -11,8 +11,9 @@ import Parse
 
 class TableViewController: UITableViewController {
 
-    var user_names = [""]
-    var user_ids   = [""]
+    var userNames   = [""]
+    var userIDs     = [""]
+    var followed    = ["":false]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,30 +25,7 @@ class TableViewController: UITableViewController {
         // this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-        var query = PFUser.query()
-
-        query?.findObjectsInBackgroundWithBlock({
-            (objects, error) -> Void in
-
-            if let users = objects {
-                self.user_names.removeAll(keepCapacity: true)
-                self.user_ids.removeAll(keepCapacity: true)
-
-                for object in users {
-                    if let user = object as? PFUser {
-                        if PFUser.currentUser()!.objectId != user.objectId {
-                            self.user_names.append(user.username!)
-                            self.user_ids.append(user.objectId!)
-                        }
-                    }
-                }
-            }
-
- //           println(self.usernames)
- //           println(self.user_ids)
-
-            self.tableView.reloadData()
-        })
+        fillUsersTable()
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,7 +44,7 @@ class TableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return user_names.count
+        return userNames.count
     }
 
 
@@ -75,54 +53,117 @@ class TableViewController: UITableViewController {
 
         // Configure the cell...
 
-        cell.textLabel?.text = user_names[indexPath.row]
-        
+        cell.textLabel?.text = userNames[indexPath.row]
+
+        let id = userIDs[indexPath.row]
+
+        if followed[id] == true {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        }
+
         return cell
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+
+        var cell = tableView.cellForRowAtIndexPath(indexPath)!
+        let id   = userIDs[indexPath.row]
+
+        if followed[id] == false {
+            followed[id] = true
+
+            // Find this cell and add a check mark to show following status
+
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+
+            // Create the relationship
+
+            var relation = PFObject(className: "relation")
+
+            relation["following"] = userIDs[indexPath.row]
+            relation["follower"]  = PFUser.currentUser()?.objectId
+            relation.saveInBackground()
+        }
+        else {
+            followed[id] = false
+            cell.accessoryType = UITableViewCellAccessoryType.None
+
+            var relQuery = PFQuery(className: "relation")
+
+            relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
+            relQuery.whereKey("following", equalTo: id)
+
+            relQuery.findObjectsInBackgroundWithBlock({
+                (objects, error) -> Void in
+
+                if let objects = objects {
+                    for object in objects {
+                        object.deleteInBackground()
+                    }
+                }
+            })
+
+        }
     }
-    */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    func fillUsersTable() {
+        var userQuery = PFUser.query()
+
+        userQuery?.findObjectsInBackgroundWithBlock({
+            (objects, error) -> Void in
+
+            if let users = objects {
+                self.userNames.removeAll(keepCapacity: true)
+                self.userIDs.removeAll(keepCapacity: true)
+                self.followed.removeAll(keepCapacity: true)
+
+                for object in users {
+                    if let user = object as? PFUser {
+                        if PFUser.currentUser()?.objectId != user.objectId {
+                            self.userNames.append(user.username!)
+                            self.userIDs.append(user.objectId!)
+
+                            self.setupFollowed(user.objectId!)
+                        }
+                    }
+                }
+            }
+            
+            println(self.userNames)
+            println(self.userIDs)
+            println(self.followed)
+        })
     }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    func setupFollowed(id: String) {
+        var relQuery = PFQuery(className: "relation")
 
+        relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
+        relQuery.whereKey("following", equalTo: id)
+
+        relQuery.findObjectsInBackgroundWithBlock({
+            (objects, error) -> Void in
+
+            if let objects = objects {
+                if objects.count > 0 {
+                    // Any reply must imply a relation
+                    self.followed[id] = true
+                }
+                else {  // Good reply, but no users
+                    self.followed[id] = false
+                }
+            }
+            else {  // Bad reply
+                self.followed[id] = false
+            }
+
+            // This reload has been moved here because of the asynchronicity of
+            // filling in the various arrays
+
+            if self.followed.count == self.userNames.count {
+                println(self.followed)
+                self.tableView.reloadData()
+            }
+        })
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
