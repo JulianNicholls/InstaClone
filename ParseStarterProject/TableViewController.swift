@@ -11,8 +11,8 @@ import Parse
 
 class TableViewController: UITableViewController {
 
-    var usernames = [""]
-    var user_ids  = [""]
+    var user_names = [""]
+    var user_ids   = [""]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,8 @@ class TableViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // Uncomment the following line to display an Edit button in the navigation bar for 
+        // this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
         var query = PFUser.query()
@@ -29,13 +30,13 @@ class TableViewController: UITableViewController {
             (objects, error) -> Void in
 
             if let users = objects {
-                self.usernames.removeAll(keepCapacity: true)
+                self.user_names.removeAll(keepCapacity: true)
                 self.user_ids.removeAll(keepCapacity: true)
 
                 for object in users {
                     if let user = object as? PFUser {
-                        if PFUser.currentUser()?.objectId != user.objectId {
-                            self.usernames.append(user.username!)
+                        if PFUser.currentUser()!.objectId != user.objectId {
+                            self.user_names.append(user.username!)
                             self.user_ids.append(user.objectId!)
                         }
                     }
@@ -65,7 +66,7 @@ class TableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return usernames.count
+        return user_names.count
     }
 
 
@@ -74,7 +75,7 @@ class TableViewController: UITableViewController {
 
         // Configure the cell...
 
-        cell.textLabel?.text = usernames[indexPath.row]
+        cell.textLabel?.text = user_names[indexPath.row]
         
         return cell
     }

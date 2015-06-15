@@ -17,7 +17,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var registered: UILabel!
 
-
     @IBOutlet weak var action: UIButton!
     @IBOutlet weak var swap: UIButton!
 
