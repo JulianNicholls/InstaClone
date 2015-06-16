@@ -87,7 +87,7 @@ class TableViewController: UITableViewController {
 
             // Create the relationship
 
-            var relation = PFObject(className: "relation")
+            var relation = PFObject(className: "Relation")
 
             relation["following"] = id
             relation["follower"]  = PFUser.currentUser()?.objectId
@@ -97,7 +97,7 @@ class TableViewController: UITableViewController {
             followed[id] = false
             cell.accessoryType = UITableViewCellAccessoryType.None
 
-            var relQuery = PFQuery(className: "relation")
+            var relQuery = PFQuery(className: "Relation")
 
             relQuery.whereKey("following", equalTo: id)
             relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
@@ -148,7 +148,7 @@ class TableViewController: UITableViewController {
     }
 
     func setupFollowed(id: String) {
-        var relQuery = PFQuery(className: "relation")
+        var relQuery = PFQuery(className: "Relation")
 
         relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
         relQuery.whereKey("following", equalTo: id)
