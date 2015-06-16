@@ -236,8 +236,8 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="caption" destination="HLE-OA-hpZ" id="818-1R-Nwq"/>
                         <outlet property="imageToPost" destination="f9m-lq-8jk" id="dHa-Cy-s3G"/>
-                        <outlet property="message" destination="HLE-OA-hpZ" id="1mw-SQ-fbC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h5X-ne-Egi" userLabel="First Responder" sceneMemberID="firstResponder"/>
