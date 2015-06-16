@@ -43,8 +43,6 @@ class PostImageViewController: UIViewController, UINavigationControllerDelegate,
     }
 
     @IBAction func postImagePressed(sender: AnyObject) {
-        println(imageToPost.image?.description)
-
         if imageToPost.image == nil {
             displayAlert("No image is selected", message: "You must select an image to post")
             return
