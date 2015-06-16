@@ -21,8 +21,10 @@
 		81BA817D1A49E0EA00E65899 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817C1A49E0EA00E65899 /* MobileCoreServices.framework */; };
 		81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */; };
 		81BA81811A49E10C00E65899 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81BA81801A49E10C00E65899 /* ParseUI.framework */; };
+		B9641A521B306C7300E91E73 /* FeedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9641A511B306C7300E91E73 /* FeedTableViewController.swift */; };
 		B977F5A51B302551000B8DA9 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B977F5A41B302551000B8DA9 /* placeholder.png */; };
 		B977F5A71B3028A3000B8DA9 /* PostImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B977F5A61B3028A3000B8DA9 /* PostImageViewController.swift */; };
+		B977F5A91B306A6A000B8DA9 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B977F5A81B306A6A000B8DA9 /* Cell.swift */; };
 		B99AC2831B2B1AB500F03B40 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99AC2821B2B1AB500F03B40 /* TableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,8 +46,10 @@
 		81BA817E1A49E0F000E65899 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		81BA81801A49E10C00E65899 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		81BA81821A49E27F00E65899 /* ParseStarterProject-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ParseStarterProject-Bridging-Header.h"; sourceTree = "<group>"; };
+		B9641A511B306C7300E91E73 /* FeedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedTableViewController.swift; sourceTree = "<group>"; };
 		B977F5A41B302551000B8DA9 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		B977F5A61B3028A3000B8DA9 /* PostImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostImageViewController.swift; sourceTree = "<group>"; };
+		B977F5A81B306A6A000B8DA9 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		B99AC2821B2B1AB500F03B40 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +100,8 @@
 				B977F5A61B3028A3000B8DA9 /* PostImageViewController.swift */,
 				81BA814C1A49DA1800E65899 /* ViewController.swift */,
 				81BA814E1A49DA1800E65899 /* Main.storyboard */,
+				B977F5A81B306A6A000B8DA9 /* Cell.swift */,
+				B9641A511B306C7300E91E73 /* FeedTableViewController.swift */,
 				81BA81511A49DA1800E65899 /* Images.xcassets */,
 				81BA81481A49DA1800E65899 /* Supporting Files */,
 			);
@@ -225,7 +231,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B977F5A71B3028A3000B8DA9 /* PostImageViewController.swift in Sources */,
+				B9641A521B306C7300E91E73 /* FeedTableViewController.swift in Sources */,
 				81BA814D1A49DA1800E65899 /* ViewController.swift in Sources */,
+				B977F5A91B306A6A000B8DA9 /* Cell.swift in Sources */,
 				B99AC2831B2B1AB500F03B40 /* TableViewController.swift in Sources */,
 				81BA814B1A49DA1800E65899 /* AppDelegate.swift in Sources */,
 			);

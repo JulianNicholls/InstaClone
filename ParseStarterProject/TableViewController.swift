@@ -44,6 +44,7 @@ class TableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -67,7 +68,7 @@ class TableViewController: UITableViewController {
 
         cell.textLabel?.text = userNames[indexPath.row]
 
-        if followed[id] == true {
+        if followed[id]! {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
 
@@ -114,10 +115,16 @@ class TableViewController: UITableViewController {
         }
     }
 
+    ////////////
+    // Pull to refresh code
+
     func refresh() {
         fillUsersTable()
     }
 
+    ///////////////
+    // Fill the users and followers tables
+    
     func fillUsersTable() {
         var userQuery = PFUser.query()
 
@@ -140,10 +147,6 @@ class TableViewController: UITableViewController {
                     }
                 }
             }
-            
-            println(self.userNames)
-            println(self.userIDs)
-            println(self.followed)
         })
     }
 
@@ -173,7 +176,6 @@ class TableViewController: UITableViewController {
             // filling in the various arrays
 
             if self.followed.count == self.userNames.count {
-                println(self.followed)
                 self.tableView.reloadData()
                 self.refresher.endRefreshing()
             }
