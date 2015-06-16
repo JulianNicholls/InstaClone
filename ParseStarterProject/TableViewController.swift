@@ -15,6 +15,8 @@ class TableViewController: UITableViewController {
     var userIDs     = [""]
     var followed    = ["":false]
 
+    var refresher : UIRefreshControl!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,7 +27,16 @@ class TableViewController: UITableViewController {
         // this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-        fillUsersTable()
+        // Set up pull to refresh
+
+        refresher = UIRefreshControl()
+
+        refresher.attributedTitle = NSAttributedString(string: "Refresh Users")
+        refresher.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+
+        self.tableView.addSubview(refresher)
+
+        refresh()
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,12 +61,11 @@ class TableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let id   = userIDs[indexPath.row]
 
         // Configure the cell...
 
         cell.textLabel?.text = userNames[indexPath.row]
-
-        let id = userIDs[indexPath.row]
 
         if followed[id] == true {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
@@ -65,11 +75,10 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-
         var cell = tableView.cellForRowAtIndexPath(indexPath)!
         let id   = userIDs[indexPath.row]
 
-        if followed[id] == false {
+        if !followed[id]! {
             followed[id] = true
 
             // Find this cell and add a check mark to show following status
@@ -80,7 +89,7 @@ class TableViewController: UITableViewController {
 
             var relation = PFObject(className: "relation")
 
-            relation["following"] = userIDs[indexPath.row]
+            relation["following"] = id
             relation["follower"]  = PFUser.currentUser()?.objectId
             relation.saveInBackground()
         }
@@ -90,8 +99,8 @@ class TableViewController: UITableViewController {
 
             var relQuery = PFQuery(className: "relation")
 
-            relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
             relQuery.whereKey("following", equalTo: id)
+            relQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
 
             relQuery.findObjectsInBackgroundWithBlock({
                 (objects, error) -> Void in
@@ -102,8 +111,11 @@ class TableViewController: UITableViewController {
                     }
                 }
             })
-
         }
+    }
+
+    func refresh() {
+        fillUsersTable()
     }
 
     func fillUsersTable() {
@@ -163,6 +175,7 @@ class TableViewController: UITableViewController {
             if self.followed.count == self.userNames.count {
                 println(self.followed)
                 self.tableView.reloadData()
+                self.refresher.endRefreshing()
             }
         })
     }
